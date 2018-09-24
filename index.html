@@ -1,0 +1,143 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/synaptic/1.1.4/synaptic.min.js"></script>
+<style>
+	body {
+		color: #333;
+	}
+	
+	canvas {
+		width: 100%;
+		height: 250px;
+		background-color: #FC3;
+	}
+	
+	table {
+		width: 100%;
+		border: solid 1px;
+	}
+	
+	th, td {
+		width: 20%;
+		text-align: center;
+	}
+	
+	.container {
+		max-width: 600px;
+		margin: 0 auto;
+	}
+	
+	.featured-image {
+		float: right;
+		width: 200px;
+	}
+	
+	@media screen and (min-width: 600px) {
+		body {
+			margin-top: 50px;
+		}
+	}
+</style>
+<body>
+	<div class="container">
+		<h1>Independently learning AI pong player</h1>
+		<p><b>In this experiment a genetic algorithm is applied to evolve a neural network to play pong game. it isn't the most optimal implementation of the algorithm but it successfully demonstrates the process of non-supervised learning. The neural network functionality is powered by <a href="http://caza.la/synaptic/#/">synaptic.js</a></b></p>
+		<canvas id="simulation"></canvas>
+		<table>
+			<tr>
+				<th>Generation</th>
+				<th>Population size</th>
+				<th>Agents alive</th>
+				<th>Score</th>
+				<th>Highscore</th>
+			</tr>
+			<tr>
+				<td id="generation">0</td>
+				<td id="populationSize">5</td>
+				<td id="agentsAlive">5</td>
+				<td id="score">0</td>
+				<td id="highscore">0</td>
+			</tr>
+		</table>
+		<small>Simulation 1. Independent neural network-controlled agents playing pong.</small>
+		<h3>How does it work?</h3>
+		<p>
+			Genetic algorithm mimics the evolution of species in the nature. The algorithm is looping through a number of steps:
+		</p>
+		<ol>
+			<li>
+				A generation of independent agents is bred
+			</li>
+			<li>
+				Each agent has a neural network to control the movement
+			</li>
+			<li>
+				Agents are evaluated by their performance in the game
+			</li>
+			<li>
+				Best performing agents breed the next generation
+			</li>
+		</ol>
+		<p>
+			Eventually the agents evolve as the best performing agents' behaviour is inherited through the process of cloning and mutation. 
+		</p>
+		<canvas id="graph"></canvas>
+		<small>Graph 1. Fitness of the best performing agent in a population.</small>
+		<h3>Local maximum valleys</h3>
+		<img class="featured-image" src="https://upload.wikimedia.org/wikipedia/commons/6/68/Extrema_example_original.svg"/>	
+		<p>
+			The development of the fitness doesn't necessarily follow a linear path as one approach might have limited potential thus reaching a local maximum at most. Agent's strategy might be successful only under certain conditions and therefore promising family tree might suddenly extinct.
+		</p>
+		<p>
+			There is likely a theoretical maximum fitness an agent may reach given any possible state of the game. Occasional breeding of agents with completely random neural networks enable the escape from a potential local maximum valley by introducing a fresh start for the development.
+		</p>
+		<h3>About neural networks</h3>
+		<p>
+			Wikipedia:
+		</p>
+		<blockquote>
+			An (artificial) neural network is a network of simple elements called neurons, which receive input, change their internal state (activation) according to that input, and produce output depending on the input and activation.
+		</blockquote>
+		<img class="featured-image" src="https://upload.wikimedia.org/wikipedia/en/5/54/Feed_forward_neural_net.gif"/>
+		<p>
+			This simulation applies a type of <i>feedforward</i> networks where neurons are formed in three layers:
+		</p>
+		<ul>
+			<li>Input layer (5 neurons)</li>
+			<li>Hidden layer (6 neurons)</li>
+			<li>Output layer (2 neurons)</li>
+		</ul>
+		<p>
+			In general neurons could be connected in arbitrary ways between each other to provide different behaviour. In this case an all-to-all connection structure is used meaning that all neurons in the input layer are connected to the neurons in the hidden layer and finally all neurons in the hidden layer are connected to the output layer.
+		</p>
+		<h3>Agents have senses but they may not know what to do with them</h3>
+		<p>
+			The game is structured so that there's a single game loop method that is executed on every frame, approximately 60 times a second. The <code>loop</code> is doing two things: updating the game state (ie. calculates new positions for the ball and the agents) and rendering the updated game state on the screen.
+			In the update, each network is activated by feeding a <i>normalized input</i> to the network which in return gives an output. The output is intepreted and applied to determine which way an agent should move next.
+		</p>
+		<p>
+			Agents need enough information about the game state to be able to play the game. The following set of values is fed to the networks's input layer:
+		</p>
+		<ol>
+			<li>Agent's horizontal (x) position</li>
+			<li>Ball's horizontal (x) position</li>
+			<li>Ball's vertical (y) position</li>
+			<li>Ball's horizontal (x) velocity</li>
+			<li>Ball's vertical (y) velocity</li>
+		</ol>
+		<p>
+			The two ouput neuron's values are interpreted as left and right commands so that the direction is determined by which one of the ouputs is greater and the velocity by how much greater that output is compared to the other.
+		</p>
+		<h3>Activation of fast forward network is simple math</h3>
+		<p>
+			The way feedforward neural network determines the output from the input is a result of lots of multiplied sums. Each neuron have bias value which can be though as importance of that neuron. Each connection between two neurons has weight value which determines how important that connection is for the end result.
+		</p>
+		<p>
+			Neural networks are often designed to perform best when input values are normalized meaning that the values are between 0-1. This simulation uses normalised input except for the agent's and ball's x-position. This is done to increase the significance of obvious input values among the less important values, leading to faster early stage development of the agents. One could consider that as giving a brief lecture to the agents to put extra focus to the horizontal position of the game elements.
+		</p>
+	</div>
+	<script src="plot.js"></script>
+	<script src="utils.js"></script>
+	<script src="ball.js"></script>
+	<script src="Agent.js"></script>
+	<script src="main.js"></script>
+</body>
+
