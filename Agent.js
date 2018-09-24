@@ -4,14 +4,14 @@ function Agent(network) {
 	this.width = Agent.width;
 	this.height = Agent.height;
 	this.failed = false;
-	this.network = network || new Architect.Perceptron(5, 5, 1);
+	this.network = network || new Architect.Perceptron(5, 3, 1);
 	this.x = canvas.scrollWidth / 2;
 	this.vX = 0;
 	this.score = 0;
-	this.maxSpeed = 10;
+	this.maxSpeed = 15;
 }
 
-Agent.width = 70;
+Agent.width = 60;
 Agent.height = 5;
 
 Agent.prototype = {
@@ -54,7 +54,7 @@ Agent.prototype = {
   getInput() {
     return this.getNormalizedInput().map((v, i) => v * this.inputGains[i]);
   },
-  inputGains: [10, 10, 1, 1, 1],
+  inputGains: [8, 8, 1, 1, 1],
 	move() {
 		this.x += this.vX;
 	},

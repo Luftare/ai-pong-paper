@@ -116,7 +116,7 @@
 		<ul>
 			<li>Input layer (5 neurons)</li>
 			<li>Hidden layer (6 neurons)</li>
-			<li>Output layer (2 neurons)</li>
+			<li>Output layer (1 neuron)</li>
 		</ul>
 		<p>
 			In general neurons could be connected in arbitrary ways between each other to provide different behaviour. In this case an all-to-all connection structure is used meaning that all neurons in the input layer are connected to the neurons in the hidden layer and finally all neurons in the hidden layer are connected to the output layer.
@@ -137,7 +137,7 @@
 			<li>Ball's vertical (y) velocity</li>
 		</ol>
 		<p>
-			The two ouput neuron's values are interpreted as left and right commands so that the direction is determined by which one of the ouputs is greater and the velocity by how much greater that output is compared to the other.
+			The output neuron's value is evaluated and applied to steer the agent. Values below 0.5 are interpreted as a command to move left and values greated than 0.5 are interpreted as command to right.
 		</p>
 		<h3>Activation of fast forward network is simple math</h3>
 		<p>
