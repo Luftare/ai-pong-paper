@@ -4,11 +4,11 @@ function Agent(network) {
 	this.width = Agent.width;
 	this.height = Agent.height;
 	this.failed = false;
-	this.network = network;
+	this.network = network || new Architect.Perceptron(5, 5, 1);
 	this.x = canvas.scrollWidth / 2;
 	this.vX = 0;
 	this.score = 0;
-	this.maxSpeed = 12;
+	this.maxSpeed = 5000;
 }
 
 Agent.width = 100;
@@ -24,19 +24,18 @@ Agent.prototype = {
 	},
 	mutate(quality) {
 		const learningRate = 0.0001 * quality;
-		for (var i = 0; i < 10; i++) {
-			const input = [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()].map((val, i) => this.inputGains[i] * val);
+		const input = [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()].map((val, i) => this.inputGains[i] * val);
+		const output = [Math.random()];
+		for (var i = 0; i < 5; i++) {
 			this.network.activate(input);
-			this.network.propagate(learningRate, [Math.random(), Math.random()]);
+			this.network.propagate(learningRate, output);
 		}
 		return this;
 	},
 	think() {
 		const input = this.getInput();
 		const output = this.network.activate(input);
-		const sign = output[0] - output[1] > 0? 1 : -1;
-		const speed = Math.pow(Math.abs(output[0] - output[1]), 0.1) * this.maxSpeed;
-		this.vX = sign * speed;
+		this.vX = (output[0] - 0.5) * this.maxSpeed;
 	},
 	getNormalizedInput() {
 		return [
@@ -54,7 +53,7 @@ Agent.prototype = {
   getInput() {
     return this.getNormalizedInput().map((v, i) => v * this.inputGains[i]);
   },
-  inputGains: [1, 1, 1, 1, 1],
+  inputGains: [20, 20, 1, 1, 1],
 	move() {
 		this.x += this.vX;
 	},

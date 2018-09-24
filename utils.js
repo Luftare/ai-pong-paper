@@ -1,22 +1,12 @@
 function generateRandomGeneration(count) {
-	return (new Array(count)).fill(1).map((a, i) => {
-    let network;
-    if(eliteNetworks.length) {
-      network = Network.fromJSON(eliteNetworks[i % eliteNetworks.length]);
-    } else {
-      network = new Architect.Perceptron(5, 6, 2);
-    }
-    const agent = new Agent(network);
-    agent.mutate(i);
-		return agent;
-	});
+	return [...Array(count)].map(() => new Agent());
 }
 
 function arrayMax(arr) {
   let max = 0;
   arr.forEach(v => {
     if(v > max) max = v;
-  })
+  }) 
   return max;
 }
 
@@ -58,7 +48,6 @@ function getNewGeneration() {
   if(scoreLog.length > 70) scoreLog.shift();
   plot(scoreLog);
   if(score > highscore) {
-    elite.length > 0 && eliteNetworks.push(elite[0].network.toJSON());
     highscore = score;
     updateElement("#highscore", highscore);
   }
