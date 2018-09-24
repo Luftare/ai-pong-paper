@@ -20,6 +20,16 @@
 		text-align: center;
 	}
 	
+	button {
+		margin: 8px;
+		background-color: green;
+		color: white;
+	}
+
+	#disable-rendering {
+		background-color: red;
+	}
+
 	.container {
 		max-width: 600px;
 		margin: 0 auto;
@@ -79,6 +89,8 @@
 		<p>
 			Eventually the agents evolve as the best performing agents' behaviour is inherited through the process of cloning and mutation. 
 		</p>
+		<button id="disable-rendering">Disable rendering</button>
+		<button id="enable-rendering">Enable rendering</button>
 		<canvas id="graph"></canvas>
 		<small>Graph 1. Fitness of the best performing agent in a population.</small>
 		<h3>Local maximum valleys</h3>

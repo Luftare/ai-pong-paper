@@ -24,17 +24,14 @@ function startNewGeneration() {
   round = 0;
   generationCounter++;
 	ball.init();
-	agents = getNewGeneration();
+  agents = getNewGeneration();
   updateElement("#populationSize", agents.length);
   updateElement("#agentsAlive", agents.length);
   updateElement("#generation", generationCounter);
 }
 
 function getPopulationElite(pop) {
-	const elite = [...pop].sort((a, b) => b.score - a.score).filter(a => a.score > 1);
-	return elite.length > 0
-		? pop.map((a, i) => elite[i % elite.length])
-		: [];
+  return [...pop].sort((a, b) => b.score - a.score).filter(a => a.score >= maxRounds);
 }
 
 function handleAllAgentsFail() {
@@ -66,12 +63,10 @@ function getNewGeneration() {
     updateElement("#highscore", highscore);
   }
   updateElement("#score", score = 0);
-	return elite.length > 0
-		? (elite
-			.map(a => a.network.toJSON())
-			.map((n, i) => new Agent(Network.fromJSON(n)))
-			.map((a, i) => a.mutate(i)))
-		: generateRandomGeneration(generationSize);
+  const newPopulation = elite.length > 0
+    ? [...[...Array(generationSize / 2)].map((_, index) => elite[index % elite.length].clone()).map((a, index) => a.mutate(index)), ...generateRandomGeneration(generationSize / 2)]
+    : generateRandomGeneration(generationSize);
+	return newPopulation;
 }
 
 function updateElement(query, txt) {
@@ -79,7 +74,7 @@ function updateElement(query, txt) {
 }
 
 function update() {
-	ball.update();
+  ball.update();
 	agents.filter(a => !a.failed).forEach(a => a.update());
 }
 
@@ -92,6 +87,16 @@ function render() {
 
 function loop() {
  	update();
-	render();
-  requestAnimationFrame(loop);
+  if(disableRendering) {
+    updateIndex++;
+    if(updateIndex >= maxUpdateIndex) {
+      setTimeout(loop, 0);
+      updateIndex = 0;
+    } else {
+      loop();
+    }
+  } else {
+    render();
+    requestAnimationFrame(loop);
+  }
 }
