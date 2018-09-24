@@ -31,7 +31,7 @@ var ball = {
         updateElement("#score", ++score);
 				updateElement("#agentsAlive", agents.filter(a => !a.failed).length);
       } else {
-        startNewGeneration();
+				handleAllAgentsFail();
       }
 		}
 	},

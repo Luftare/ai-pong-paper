@@ -8,6 +8,8 @@ let agents = [];
 let generationCounter = 1;
 let score = 0;
 let highscore = 0;
+const maxRounds = 3;
+let round = 0;
 
 window.onload = () => {
 	ball.init();

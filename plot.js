@@ -6,7 +6,6 @@ const plot = (function(canvas, ctx){
     if(!arr.length) return;
     const max = arrayMax(arr);
     const len = Math.max(arr.length, 50);
-    let labelDrawn = false;
     arr.forEach((val, i) => {
       const barWidth = (1 / len) * canvas.width;
       const barX = canvas.width * (i / len);

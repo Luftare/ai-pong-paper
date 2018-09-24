@@ -21,6 +21,7 @@ function arrayMax(arr) {
 }
 
 function startNewGeneration() {
+  round = 0;
   generationCounter++;
 	ball.init();
 	agents = getNewGeneration();
@@ -34,6 +35,24 @@ function getPopulationElite(pop) {
 	return elite.length > 0
 		? pop.map((a, i) => elite[i % elite.length])
 		: [];
+}
+
+function handleAllAgentsFail() {
+  const shouldStartNewGeneration = round >= maxRounds;
+  if(shouldStartNewGeneration) {
+    startNewGeneration();
+  } else {
+    startNewRoundWithExistingGeneration();
+  }
+}
+
+function startNewRoundWithExistingGeneration() {
+  round++;
+  ball.init();
+  agents.forEach(agent => {
+    agent.failed = false;
+    agent.x = canvas.scrollWidth / 2;
+  });
 }
 
 function getNewGeneration() {
