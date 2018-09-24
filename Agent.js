@@ -8,7 +8,7 @@ function Agent(network) {
 	this.x = canvas.scrollWidth / 2;
 	this.vX = 0;
 	this.score = 0;
-	this.maxSpeed = 1800;
+	this.maxSpeed = 10;
 }
 
 Agent.width = 70;
@@ -23,10 +23,10 @@ Agent.prototype = {
 		this.bound();
 	},
 	mutate(quality) {
-		const learningRate = 0.0001;
+		const learningRate = 0.000001;
 		const input = [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()].map((val, i) => this.inputGains[i] * val);
 		const output = [Math.random()];
-		for (var i = 0; i < quality * 10; i++) {
+		for (var i = 0; i < quality; i++) {
 			this.network.activate(input);
 			this.network.propagate(learningRate, output);
 		}
@@ -35,7 +35,8 @@ Agent.prototype = {
 	think() {
 		const input = this.getInput();
 		const output = this.network.activate(input);
-		this.vX = (output[0] - 0.5) * this.maxSpeed;
+		const sign = output[0] > 0.5 ? 1 : -1;
+		this.vX = Math.pow(Math.abs(output[0] - 0.5), 0.1) * sign * this.maxSpeed;
 	},
 	getNormalizedInput() {
 		return [
@@ -53,7 +54,7 @@ Agent.prototype = {
   getInput() {
     return this.getNormalizedInput().map((v, i) => v * this.inputGains[i]);
   },
-  inputGains: [30, 30, 1, 1, 1],
+  inputGains: [10, 10, 1, 1, 1],
 	move() {
 		this.x += this.vX;
 	},
