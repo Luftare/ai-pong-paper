@@ -1,6 +1,8 @@
 const {Architect, Neuron, Layer, Network, Trainer} = synaptic;
 
-function Agent(network) {
+function Agent(network, isHuman = false) {
+	this.isHuman = isHuman;
+	this.humanInput = [0.5];
 	this.width = Agent.width;
 	this.height = Agent.height;
 	this.failed = false;
@@ -18,7 +20,11 @@ Agent.prototype = {
 	update() {
 		if(this.score >= maxScore) this.failed = true;
 		if(this.failed) return;
-		this.think();
+		if(this.isHuman) {
+			this.handleExternalInput();
+		} else {
+			this.think();
+		}
 		this.move();
 		this.bound();
 	},
@@ -32,9 +38,15 @@ Agent.prototype = {
 		}
 		return this;
 	},
+	handleExternalInput() {
+		this.applyOutputToVelocity(this.humanInput);
+	},
 	think() {
 		const input = this.getInput();
 		const output = this.network.activate(input);
+		this.applyOutputToVelocity(output);
+	},
+	applyOutputToVelocity(output) {
 		const sign = output[0] > 0.5 ? 1 : -1;
 		this.vX = Math.pow(Math.abs(output[0] - 0.5), 0.02) * sign * this.maxSpeed;
 	},
@@ -62,6 +74,7 @@ Agent.prototype = {
 		this.x = Math.max(Math.min(this.x, canvas.width - this.width / 2), this.width / 2);
 	},
 	draw() {
+		ctx.fillStyle = this.isHuman ? "red" : "black";
 		ctx.fillRect(this.x - this.width / 2, canvas.height, this.width, -this.height);
     ctx.fillRect(this.x, canvas.scrollHeight - this.height, 1, -5);
 	}

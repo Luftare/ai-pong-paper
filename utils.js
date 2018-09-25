@@ -21,7 +21,7 @@ function startNewGeneration() {
 }
 
 function getPopulationElite(pop) {
-  return [...pop].sort((a, b) => b.score - a.score).filter(a => a.score >= maxRounds);
+  return [...pop].sort((a, b) => b.score - a.score).filter(a => a.score >= maxRounds).filter(a => !a.isHuman);
 }
 
 function handleAllAgentsFail() {
@@ -30,6 +30,9 @@ function handleAllAgentsFail() {
     startNewGeneration();
   } else {
     startNewRoundWithExistingGeneration();
+  }
+  if(humanIsReadyToPlay && !agents.find(agent => agent.isHuman)) {
+    agents.push(new Agent(null, true));
   }
 }
 
@@ -55,6 +58,7 @@ function getNewGeneration() {
   const newPopulation = elite.length > 0
     ? [...[...Array(generationSize / 2)].map((_, index) => elite[index % elite.length].clone()).map((a, index) => a.mutate(index)), ...generateRandomGeneration(generationSize / 2)]
     : generateRandomGeneration(generationSize);
+
 	return newPopulation;
 }
 
@@ -71,7 +75,7 @@ function render() {
 	canvas.width = canvas.scrollWidth;
 	canvas.height = canvas.scrollHeight;
 	ball.draw();
-	agents.filter(a => !a.failed).forEach(a => a.draw());
+  agents.filter(a => !a.failed).forEach(a => a.draw());
 }
 
 function loop() {
