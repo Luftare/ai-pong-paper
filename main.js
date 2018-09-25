@@ -2,12 +2,12 @@ const GENERATION_SIZE = 50;
 const ROUNDS_PER_GENERATION = 8;
 const MAX_SCHEDULED_UPDATES = 100;
 const MAX_SCORE = 5000;
-const AGENT_LEARNING_RATE = 0.0000003;
-const AGENT_MAX_SPEED = 8;
+const AGENT_LEARNING_RATE = 0.0000001;
+const AGENT_MAX_SPEED = 10;
 const AGENT_WIDTH = 60;
 const AGENT_HEIGHT = 5;
 const AGENT_INPUT_QUANTIFICATION = 0.02;
-const AGENT_INPUT_GAINS = [2, 2, 1, 1, 1];//["agent horizontal position", "ball horizontal position", "ball vertical position", "ball horizontal velocity", "ball vertical velocity"] 
+const AGENT_INPUT_GAINS = [5, 5, 1, 1, 1];//["agent horizontal position", "ball horizontal position", "ball vertical position", "ball horizontal velocity", "ball vertical velocity"] 
 const AGENT_NETWORK_LAYERS = [5, 2, 1];
 
 const canvas = document.getElementById("simulation");
