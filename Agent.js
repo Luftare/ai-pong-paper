@@ -46,7 +46,7 @@ Agent.prototype = {
 	},
 	applyOutputToVelocity(output) {
 		const sign = output[0] > 0.5 ? 1 : -1;
-		this.vX = Math.pow(Math.abs(output[0] - 0.5), 0.1) * sign * AGENT_MAX_SPEED;
+		this.vX = Math.pow(Math.abs(output[0] - 0.5), AGENT_INPUT_QUANTIFICATION) * sign * AGENT_MAX_SPEED;
 	},
 	getNormalizedInput() {
 		return [
