@@ -22,7 +22,8 @@
 	}
 	
 	button {
-		margin: 8px;
+		margin-right: 8px;
+		margin-bottom: 8px;
 		background-color: green;
 		color: white;
 	}
@@ -51,7 +52,8 @@
 	<div class="container">
 		<h1>Independently learning AI pong player</h1>
 		<p><b>In this experiment a genetic algorithm is applied to evolve a neural network to play pong game. it isn't the most optimal implementation of the algorithm but it successfully demonstrates the process of non-supervised learning. The neural network functionality is powered by <a href="http://caza.la/synaptic/#/">synaptic.js</a></b></p>
-		<input type="range" id="agent-width" min="20" max="200" hidden />
+		<button id="disable-rendering">Disable rendering</button>
+		<button id="enable-rendering">Enable rendering</button>
 		<canvas id="simulation"></canvas>
 		<table>
 			<tr>
@@ -69,7 +71,8 @@
 				<td id="highscore">0</td>
 			</tr>
 		</table>
-		<small>Simulation 1. Independent neural network-controlled agents playing pong.</small>
+		<canvas id="graph"></canvas>
+		<small>Neural network-controlled agents playing pong. Fitness of the best performing agent in a population is shown in the graph.</small>
 		<h3>How does it work?</h3>
 		<p>
 			Genetic algorithm mimics the evolution of species in the nature. The algorithm is looping through a number of steps:
@@ -91,10 +94,6 @@
 		<p>
 			Eventually the agents evolve as the best performing agents' behaviour is inherited through the process of cloning and mutation. 
 		</p>
-		<button id="disable-rendering">Disable rendering</button>
-		<button id="enable-rendering">Enable rendering</button>
-		<canvas id="graph"></canvas>
-		<small>Graph 1. Fitness of the best performing agent in a population.</small>
 		<h3>Local maximum valleys</h3>
 		<img class="featured-image" src="https://upload.wikimedia.org/wikipedia/commons/6/68/Extrema_example_original.svg"/>	
 		<p>
