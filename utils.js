@@ -11,21 +11,22 @@ function arrayMax(arr) {
 }
 
 function startNewGeneration() {
-  round = 0;
+  currentRoundOfGeneration = 0;
   generationCounter++;
 	ball.init();
   agents = getNewGeneration();
+  updateHighscore();
   updateElement("#populationSize", agents.length);
   updateElement("#agentsAlive", agents.length);
   updateElement("#generation", generationCounter);
 }
 
 function getPopulationElite(pop) {
-  return [...pop].sort((a, b) => b.score - a.score).filter(a => a.score >= maxRounds).filter(a => !a.isHuman);
+  return [...pop].sort((a, b) => b.score - a.score).filter(a => a.score >= ROUNDS_PER_GENERATION).filter(a => !a.isHuman);
 }
 
 function handleAllAgentsFail() {
-  const shouldStartNewGeneration = round >= maxRounds;
+  const shouldStartNewGeneration = currentRoundOfGeneration >= ROUNDS_PER_GENERATION;
   if(shouldStartNewGeneration) {
     startNewGeneration();
   } else {
@@ -37,7 +38,7 @@ function handleAllAgentsFail() {
 }
 
 function startNewRoundWithExistingGeneration() {
-  round++;
+  currentRoundOfGeneration++;
   ball.init();
   agents.forEach(agent => {
     agent.failed = false;
@@ -47,6 +48,18 @@ function startNewRoundWithExistingGeneration() {
 
 function getNewGeneration() {
   const elite = getPopulationElite(agents);
+  const newPopulation = elite.length > 0
+    ? [...[...Array(GENERATION_SIZE / 2)].map((_, index) => elite[index % elite.length].clone()).map((a, index) => a.mutate(index)), ...generateRandomGeneration(GENERATION_SIZE / 2)]
+    : generateRandomGeneration(GENERATION_SIZE);
+
+	return newPopulation;
+}
+
+function updateElement(query, txt) {
+  document.querySelector(query).innerHTML = txt;
+}
+
+function updateHighscore() {
   scoreLog.push(score);
   if(scoreLog.length > 70) scoreLog.shift();
   plot(scoreLog);
@@ -54,16 +67,8 @@ function getNewGeneration() {
     highscore = score;
     updateElement("#highscore", highscore);
   }
-  updateElement("#score", score = 0);
-  const newPopulation = elite.length > 0
-    ? [...[...Array(generationSize / 2)].map((_, index) => elite[index % elite.length].clone()).map((a, index) => a.mutate(index)), ...generateRandomGeneration(generationSize / 2)]
-    : generateRandomGeneration(generationSize);
-
-	return newPopulation;
-}
-
-function updateElement(query, txt) {
-  document.querySelector(query).innerHTML = txt;
+  score = 0;
+  updateElement("#score", score);
 }
 
 function update() {
@@ -82,7 +87,7 @@ function loop() {
  	update();
   if(disableRendering) {
     updateIndex++;
-    if(updateIndex >= maxUpdateIndex) {
+    if(updateIndex >= MAX_SCHEDULED_UPDATED) {
       setTimeout(loop, 0);
       updateIndex = 0;
     } else {

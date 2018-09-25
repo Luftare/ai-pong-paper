@@ -18,7 +18,7 @@ Agent.height = 5;
 
 Agent.prototype = {
 	update() {
-		if(this.score >= maxScore) this.failed = true;
+		if(this.score >= MAX_SCORE) this.failed = true;
 		if(this.failed) return;
 		if(this.isHuman) {
 			this.handleExternalInput();
@@ -29,10 +29,10 @@ Agent.prototype = {
 		this.bound();
 	},
 	mutate(quality) {
-		const learningRate = 0.000005;
+		const learningRate = 0.0000013;
 		const input = [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()].map((val, i) => this.inputGains[i] * val);
 		const output = [Math.random()];
-		for (var i = 0; i < quality * 8; i++) {
+		for (var i = 0; i < quality * 1; i++) {
 			this.network.activate(input);
 			this.network.propagate(learningRate, output);
 		}

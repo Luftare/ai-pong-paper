@@ -2,7 +2,7 @@ const plot = (function(canvas, ctx){
   
   function plot(arr) {
     canvas.width = canvas.scrollWidth;
-    canvas.heigfht = canvas.scrollHeight;
+    canvas.height = canvas.scrollHeight;
     if(!arr.length) return;
     const max = arrayMax(arr);
     const len = Math.max(arr.length, 50);
