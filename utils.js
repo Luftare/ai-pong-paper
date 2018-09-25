@@ -22,7 +22,7 @@ function startNewGeneration() {
 }
 
 function getPopulationElite(pop) {
-  return [...pop].sort((a, b) => b.score - a.score).filter(a => a.score >= ROUNDS_PER_GENERATION).filter(a => !a.isHuman);
+  return [...pop].sort((a, b) => b.score - a.score).filter(a => a.score >= ROUNDS_PER_GENERATION).filter(a => !a.isHuman).filter((_, index) => index < MAX_ELITE_COUNT);
 }
 
 function handleAllAgentsFail() {
