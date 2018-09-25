@@ -1,7 +1,13 @@
 const GENERATION_SIZE = 50;
 const ROUNDS_PER_GENERATION = 8;
-const MAX_SCHEDULED_UPDATED = 100;
+const MAX_SCHEDULED_UPDATES = 100;
 const MAX_SCORE = 5000;
+const AGENT_LEARNING_RATE = 0.0000013;
+const AGENT_MAX_SPEED = 20;
+const AGENT_WIDTH = 60;
+const AGENT_HEIGHT = 5;
+const AGENT_INPUT_GAINS = [6, 6, 1, 1, 1];//["agent horizontal position", "ball horizontal position", "ball vertical position", "ball horizontal velocity", "ball vertical velocity"] 
+const AGENT_NETWORK_LAYERS = [5, 2, 1];
 
 const canvas = document.getElementById("simulation");
 const ctx = canvas.getContext("2d");

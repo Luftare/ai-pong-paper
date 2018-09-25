@@ -6,15 +6,14 @@ function Agent(network, isHuman = false) {
 	this.width = Agent.width;
 	this.height = Agent.height;
 	this.failed = false;
-	this.network = network || new Architect.Perceptron(5, 2, 1);
+	this.network = network || new Architect.Perceptron(...AGENT_NETWORK_LAYERS);
 	this.x = canvas.scrollWidth / 2;
 	this.vX = 0;
 	this.score = 0;
-	this.maxSpeed = 20;
 }
 
-Agent.width = 60;
-Agent.height = 5;
+Agent.width = AGENT_WIDTH;
+Agent.height = AGENT_HEIGHT;
 
 Agent.prototype = {
 	update() {
@@ -28,13 +27,12 @@ Agent.prototype = {
 		this.move();
 		this.bound();
 	},
-	mutate(quality) {
-		const learningRate = 0.0000013;
+	mutate(amount) {
 		const input = [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()].map((val, i) => this.inputGains[i] * val);
 		const output = [Math.random()];
-		for (var i = 0; i < quality * 1; i++) {
+		for (var i = 0; i < amount; i++) {
 			this.network.activate(input);
-			this.network.propagate(learningRate, output);
+			this.network.propagate(AGENT_LEARNING_RATE, output);
 		}
 		return this;
 	},
@@ -48,7 +46,7 @@ Agent.prototype = {
 	},
 	applyOutputToVelocity(output) {
 		const sign = output[0] > 0.5 ? 1 : -1;
-		this.vX = Math.pow(Math.abs(output[0] - 0.5), 0.1) * sign * this.maxSpeed;
+		this.vX = Math.pow(Math.abs(output[0] - 0.5), 0.1) * sign * AGENT_MAX_SPEED;
 	},
 	getNormalizedInput() {
 		return [
@@ -66,7 +64,7 @@ Agent.prototype = {
   getInput() {
     return this.getNormalizedInput().map((v, i) => v * this.inputGains[i]);
   },
-	inputGains: [6, 6, 1, 1, 1],
+	inputGains: AGENT_INPUT_GAINS,
 	move() {
 		this.x += this.vX;
 	},

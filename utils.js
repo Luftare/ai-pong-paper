@@ -87,7 +87,7 @@ function loop() {
  	update();
   if(disableRendering) {
     updateIndex++;
-    if(updateIndex >= MAX_SCHEDULED_UPDATED) {
+    if(updateIndex >= MAX_SCHEDULED_UPDATES) {
       setTimeout(loop, 0);
       updateIndex = 0;
     } else {
